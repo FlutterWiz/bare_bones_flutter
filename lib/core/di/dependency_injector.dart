@@ -5,5 +5,5 @@ final getIt = GetIt.instance;
 
 void injectionSetup() {
   // We call AppRouter for once and register it as a singleton.
-  getIt.registerSingleton(() => AppRouter());
+  getIt.registerSingleton<AppRouter>(AppRouter());
 }
