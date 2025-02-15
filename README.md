@@ -1,5 +1,8 @@
 # bare_bones_flutter
 
+In progress.
+
+---
 
 ![x](https://github.com/matanlurey/mansion/assets/67283777/a16ab1c4-671a-4832-9c9e-da2a13a39c91)
 
