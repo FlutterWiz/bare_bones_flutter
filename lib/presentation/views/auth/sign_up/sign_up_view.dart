@@ -1,4 +1,4 @@
-import 'package:bare_bones_flutter/core/design_system/components/bare_bones_scaffold.dart';
+import 'package:bare_bones_flutter/presentation/design_system/widgets/bare_bones_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -48,12 +48,7 @@ class _SignUpViewState extends State<SignUpView> {
   @override
   Widget build(BuildContext context) {
     return BareBonesScaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)!.signUp,
-          style: const TextStyle(fontSize: 20),
-        ),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.signUp, style: const TextStyle(fontSize: 20))),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -120,11 +115,12 @@ class _SignUpViewState extends State<SignUpView> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _isButtonDisabled
-                    ? null
-                    : () {
-                        context.pop();
-                      },
+                onPressed:
+                    _isButtonDisabled
+                        ? null
+                        : () {
+                          context.pop();
+                        },
                 child: Text(AppLocalizations.of(context)!.signUpExclamation),
               ),
             ],

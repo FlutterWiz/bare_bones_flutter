@@ -1,5 +1,5 @@
-import 'package:bare_bones_flutter/core/design_system/colors/colors.dart';
-import 'package:bare_bones_flutter/core/design_system/components/bare_bones_scaffold.dart';
+import 'package:bare_bones_flutter/presentation/design_system/colors.dart';
+import 'package:bare_bones_flutter/presentation/design_system/widgets/bare_bones_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

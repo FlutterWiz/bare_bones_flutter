@@ -8,11 +8,11 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appRouterConfig = getIt<AppRouter>();
+    final appRouter = getIt<AppRouter>();
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routerConfig: appRouterConfig.router,
+      routerConfig: appRouter.router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
     );
