@@ -1,4 +1,4 @@
-import 'package:bare_bones_flutter/core/constants/router_enums.dart';
+import 'package:bare_bones_flutter/core/constants/enums/router_enums.dart';
 import 'package:bare_bones_flutter/presentation/design_system/colors.dart';
 import 'package:bare_bones_flutter/presentation/design_system/widgets/bare_bones_scaffold.dart';
 import 'package:flutter/material.dart';
