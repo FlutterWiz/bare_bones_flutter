@@ -1,4 +1,4 @@
-import 'package:bare_bones_flutter/core/constants/router_enums.dart';
+import 'package:bare_bones_flutter/core/constants/enums/router_enums.dart';
 import 'package:bare_bones_flutter/core/init/router/custom_page_builder_widget.dart';
 import 'package:bare_bones_flutter/presentation/views/auth/sign_in/sign_in_view.dart';
 import 'package:bare_bones_flutter/presentation/views/auth/sign_up/sign_up_view.dart';
