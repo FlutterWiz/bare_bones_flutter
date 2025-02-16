@@ -1,47 +1,50 @@
 import 'package:bare_bones_flutter/core/constants/enums/router_enums.dart';
+import 'package:bare_bones_flutter/presentation/blocs/auth/auth_cubit.dart';
+import 'package:bare_bones_flutter/presentation/blocs/auth/auth_state.dart';
 import 'package:bare_bones_flutter/presentation/design_system/colors.dart';
 import 'package:bare_bones_flutter/presentation/design_system/widgets/bare_bones_loading_indicator.dart';
 import 'package:bare_bones_flutter/presentation/design_system/widgets/bare_bones_scaffold.dart';
-import 'package:bare_bones_flutter/presentation/view_models/auth/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ProfileView extends ConsumerWidget {
+class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(authViewModelProvider, (p, c) {
-      if (p?.isLoading == false && c.isLoading == true) {
-        BareBonesLoadingIndicator.of(context).show();
-      }
-      if (p?.isLoading == true && c.isLoading == false) {
-        BareBonesLoadingIndicator.of(context).hide();
-      }
-      if (p?.isLoggedIn == true && c.isLoggedIn == false) {
-        context.go(RouterEnums.signInView.routeName);
-      }
-    });
+  Widget build(BuildContext context) {
+    final uid = context.watch<AuthCubit>().state.user.uid;
 
-    final uid = ref.watch(authViewModelProvider).user.uid;
-
-    return BareBonesScaffold(
-      backgroundColor: blue,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(AppLocalizations.of(context)!.profile),
-            Padding(padding: const EdgeInsets.symmetric(vertical: 20), child: Text(uid)),
-            ElevatedButton(
-              onPressed: () {
-                ref.read(authViewModelProvider.notifier).signOut();
-              },
-              child: Text(AppLocalizations.of(context)!.signOutExclamation),
-            ),
-          ],
+    return BlocListener<AuthCubit, AuthState>(
+      listenWhen: (p, c) => p.isLoading != c.isLoading || p.isLoggedIn != c.isLoggedIn,
+      listener: (context, state) {
+        if (state.isLoading == true) {
+          BareBonesLoadingIndicator.of(context).show();
+        }
+        if (state.isLoading == false) {
+          BareBonesLoadingIndicator.of(context).hide();
+        }
+        if (state.isLoggedIn == false) {
+          context.go(RouterEnums.signInView.routeName);
+        }
+      },
+      child: BareBonesScaffold(
+        backgroundColor: blue,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(AppLocalizations.of(context)!.profile),
+              Padding(padding: const EdgeInsets.symmetric(vertical: 20), child: Text(uid)),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<AuthCubit>().signOut();
+                },
+                child: Text(AppLocalizations.of(context)!.signOutExclamation),
+              ),
+            ],
+          ),
         ),
       ),
     );

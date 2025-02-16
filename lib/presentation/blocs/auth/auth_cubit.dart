@@ -1,20 +1,15 @@
-import 'package:bare_bones_flutter/core/di/dependency_injector.dart';
 import 'package:bare_bones_flutter/core/interfaces/i_auth_repository.dart';
 import 'package:bare_bones_flutter/domain/models/user.dart';
-import 'package:bare_bones_flutter/presentation/view_models/auth/auth_state.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bare_bones_flutter/presentation/blocs/auth/auth_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-final authViewModelProvider = StateNotifierProvider<AuthViewModel, AuthState>((ref) {
-  return AuthViewModel();
-});
+class AuthCubit extends Cubit<AuthState> {
+  AuthCubit(this.authRepo) : super(AuthState.initial());
 
-class AuthViewModel extends StateNotifier<AuthState> {
-  AuthViewModel() : super(AuthState.initial());
-
-  final authRepo = getIt<IAuthRepository>();
+  final IAuthRepository authRepo;
 
   Future<void> createUserWithEmailAndPassword({required String email, required String password}) async {
-    state = state.copyWith(isLoading: true);
+    emit(state.copyWith(isLoading: true));
 
     try {
       // to show properly, the loading indicator is working
@@ -23,15 +18,15 @@ class AuthViewModel extends StateNotifier<AuthState> {
       final userCredential = await authRepo.createUserWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
         final user = User(email: userCredential.user?.email ?? '', uid: userCredential.user?.uid ?? '');
-        state = state.copyWith(isLoading: false, user: user);
+        emit(state.copyWith(isLoading: false, user: user));
       }
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
 
   Future<void> signInWithEmailAndPassword({required String email, required String password}) async {
-    state = state.copyWith(isLoading: true);
+    emit(state.copyWith(isLoading: true));
 
     try {
       // to show properly, the loading indicator is working
@@ -40,15 +35,15 @@ class AuthViewModel extends StateNotifier<AuthState> {
       final userCredential = await authRepo.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
         final user = User(email: userCredential.user?.email ?? '', uid: userCredential.user?.uid ?? '');
-        state = state.copyWith(isLoading: false, user: user, isLoggedIn: true);
+        emit(state.copyWith(isLoading: false, user: user, isLoggedIn: true));
       }
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString(), isLoggedIn: false);
+      emit(state.copyWith(isLoading: false, error: e.toString(), isLoggedIn: false));
     }
   }
 
   Future<void> signOut() async {
-    state = state.copyWith(isLoading: true);
+    emit(state.copyWith(isLoading: true));
 
     try {
       // to show properly, the loading indicator is working
@@ -56,9 +51,9 @@ class AuthViewModel extends StateNotifier<AuthState> {
 
       await authRepo.signOut();
 
-      state = state.copyWith(isLoading: false, isLoggedIn: false);
+      emit(state.copyWith(isLoading: false, isLoggedIn: false));
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
 }
