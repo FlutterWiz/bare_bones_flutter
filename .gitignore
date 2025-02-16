@@ -26,3 +26,5 @@ doc/api/
 .flutter-plugins
 .flutter-plugins-dependencies
 .DS_Store
+android/app/google-services.json
+lib/core/config/app_config.dart
