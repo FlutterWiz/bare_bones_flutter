@@ -1,5 +1,5 @@
 import 'package:bare_bones_flutter/core/di/dependency_injector.dart';
-import 'package:bare_bones_flutter/data/repository/auth_repository.dart';
+import 'package:bare_bones_flutter/core/interfaces/i_auth_repository.dart';
 import 'package:bare_bones_flutter/domain/models/user.dart';
 import 'package:bare_bones_flutter/presentation/view_models/auth/auth_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +11,7 @@ final authViewModelProvider = StateNotifierProvider<AuthViewModel, AuthState>((r
 class AuthViewModel extends StateNotifier<AuthState> {
   AuthViewModel() : super(AuthState.initial());
 
-  final authRepo = getIt<AuthRepository>();
+  final authRepo = getIt<IAuthRepository>();
 
   Future<void> createUserWithEmailAndPassword({required String email, required String password}) async {
     state = state.copyWith(isLoading: true);

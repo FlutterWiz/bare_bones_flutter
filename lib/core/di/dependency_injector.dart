@@ -10,5 +10,9 @@ void injectionSetup() {
   // We call AppRouter for once and register it as a singleton.
   getIt.registerSingleton<AppRouter>(AppRouter());
 
-  getIt.registerLazySingleton<IAuthRepository>(() => AuthRepository(FirebaseAuth.instance));
+  // Register Firebase Auth
+  getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+
+  // Register AuthRepository
+  getIt.registerLazySingleton<IAuthRepository>(() => AuthRepository(getIt<FirebaseAuth>()));
 }
