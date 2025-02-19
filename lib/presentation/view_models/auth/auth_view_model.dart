@@ -4,23 +4,27 @@ import 'package:bare_bones_flutter/domain/models/user.dart';
 import 'package:bare_bones_flutter/presentation/view_models/auth/auth_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final authViewModelProvider = StateNotifierProvider<AuthViewModel, AuthState>((ref) {
-  return AuthViewModel();
-});
+final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(() => AuthViewModel());
 
-class AuthViewModel extends StateNotifier<AuthState> {
-  AuthViewModel() : super(AuthState.initial());
+class AuthViewModel extends Notifier<AuthState> {
+  late final IAuthRepository authRepo;
 
-  final authRepo = getIt<IAuthRepository>();
+  @override
+  AuthState build() {
+    authRepo = getIt<IAuthRepository>();
+
+    return AuthState.initial();
+  }
 
   Future<void> createUserWithEmailAndPassword({required String email, required String password}) async {
     state = state.copyWith(isLoading: true);
 
     try {
-      // to show properly, the loading indicator is working
+      // Simulate a delay for loading indicator demonstration
       await Future.delayed(const Duration(seconds: 2));
 
       final userCredential = await authRepo.createUserWithEmailAndPassword(email: email, password: password);
+
       if (userCredential.user != null) {
         final user = User(email: userCredential.user?.email ?? '', uid: userCredential.user?.uid ?? '');
         state = state.copyWith(isLoading: false, user: user);
@@ -34,10 +38,10 @@ class AuthViewModel extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      // to show properly, the loading indicator is working
       await Future.delayed(const Duration(seconds: 2));
 
       final userCredential = await authRepo.signInWithEmailAndPassword(email: email, password: password);
+
       if (userCredential.user != null) {
         final user = User(email: userCredential.user?.email ?? '', uid: userCredential.user?.uid ?? '');
         state = state.copyWith(isLoading: false, user: user, isLoggedIn: true);
@@ -51,11 +55,9 @@ class AuthViewModel extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      // to show properly, the loading indicator is working
       await Future.delayed(const Duration(seconds: 2));
 
       await authRepo.signOut();
-
       state = state.copyWith(isLoading: false, isLoggedIn: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
